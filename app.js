@@ -10,9 +10,9 @@ var log = require('./libs/log')(module);
 
 
 var app = express();
+app.engine('ejs', require('ejs-locals'));
 app.set('port', config.get('port'));
-
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'template'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -48,7 +48,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'template'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());

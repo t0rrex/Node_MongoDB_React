@@ -1,3 +1,56 @@
+let mongoose = require('libs/mongoose');
+mongoose.set('debug', true); // allow to watch all mongoose actions!
+let async = require('async');
+
+async.series([
+    open,
+    //dropDatabase, //user have no access to drop db
+    requireModels,
+    createUsers
+], function(err) {
+    console.log(arguments);
+    mongoose.disconnect();
+    process.exit(err ? 255 : 0);
+});
+
+function open(callback) {
+    mongoose.connection.on('open', callback);
+}
+
+function dropDatabase(callback) {
+    let db = mongoose.connection.db;
+    db.dropDatabase(callback);
+}
+
+function requireModels(callback) {
+    require('models/user');
+
+    async.each(Object.keys(mongoose.models), function(modelName, callback) {
+        mongoose.models[modelName].ensureIndexes(callback);
+    }, callback);
+}
+
+function createUsers(callback) {
+
+    let users = [
+        {username: 'Вася', password: 'supervasya'},
+        {username: 'Петя', password: '123'},
+        {username: 'admin', password: 'thetruehero'}
+    ];
+
+    async.each(users, function(userData, callback) {
+        let user = new mongoose.models.User(userData);
+        user.save(callback);
+    }, callback);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+// 3. User creation + Mongoose our module with connection through config.json mongoose:uri
+// + password (virtual with salt and SHA1)
+/*/
 const User = require('models/user').User;
 
 let user = new User({
@@ -6,9 +59,14 @@ let user = new User({
 });
 
 user.save().then(() => console.log(arguments));
+/*/
+
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 /*/
-//MONGOOSE CONNECTION
+// 2.  MONGOOSE CONNECTION
 
 const mongoose = require('mongoose');
 const uri = "mongodb+srv://User:~1qw23er45@cloudbox-4ufpe.mongodb.net/Node1?retryWrites=true";
@@ -37,7 +95,9 @@ kitty.save().then(() => kitty.meow());
 /*/
 
 
-//MONGODB NATIVE DRIVER to MONGODB CONNECTION \|/ //
+////////////////////////////////////////////////////////////////////////////////
+
+// 1.  MONGODB NATIVE DRIVER to MONGODB CONNECTION \|/ //
 
 /*/const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');

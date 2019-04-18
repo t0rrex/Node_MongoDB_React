@@ -1,16 +1,57 @@
-const MongoClient = require('mongodb').MongoClient;
+const User = require('models/user').User;
+
+let user = new User({
+    username: "Tester",
+    password: "secret"
+});
+
+user.save().then(() => console.log(arguments));
+
+/*/
+//MONGOOSE CONNECTION
+
+const mongoose = require('mongoose');
+const uri = "mongodb+srv://User:~1qw23er45@cloudbox-4ufpe.mongodb.net/Node1?retryWrites=true";
+mongoose.connect(uri, {useNewUrlParser: true});
+
+const Schema = mongoose.Schema;
+const BlogPost = new Schema({
+    title: String,
+    body: String,
+    date: Date
+});
+
+BlogPost.methods.meow = function () {
+    console.log(this.get('title'));
+};
+
+const Cat = mongoose.model('Cat', BlogPost);
+
+const kitty = new Cat({
+    title: 'Zildjian',
+    body: 'Meow',
+    date: Date.now()
+});
+
+kitty.save().then(() => kitty.meow());
+/*/
+
+
+//MONGODB NATIVE DRIVER to MONGODB CONNECTION \|/ //
+
+/*/const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const uri = "mongodb+srv://User:~1qw23er45@cloudbox-4ufpe.mongodb.net/node1?retryWrites=true";
+const uri = "mongodb+srv://User:~1qw23er45@cloudbox-4ufpe.mongodb.net/Node1?retryWrites=true";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
 client.connect(err => {
+
     const collection = client.db("Node1").collection("NewCollection");
+    const db = client.db("Node1");
+
     // perform actions on the collection object
     assert.equal(null, err);
     console.log("Connected successfully to server");
-
-    const db = client.db("Node1");
-
 
     //insertDocuments(db, collection, function () {
         //updateDocument(db, collection, function () {
@@ -19,8 +60,6 @@ client.connect(err => {
             //});
         //});
     //});
-
-
 
 });
 
@@ -44,7 +83,7 @@ const findDocuments = function(db, collection, callback) {
     collection.find({}).toArray(function(err, docs) {
         assert.equal(err, null);
         console.log("Found the following records");
-        console.log(docs)
+        console.log(docs);
         callback(docs);
     });
 }
@@ -71,3 +110,4 @@ const removeDocument = function(db, collection, callback) {
         callback(result);
     });
 }
+/*/

@@ -7,6 +7,8 @@ let logger = require('morgan');
 let indexRouter = require('./routes/index');
 let log = require('./libs/log')(module);
 let HttpError = require('error').HttpError;
+let session = require('express-session');
+let mongoose = require('./libs/mongoose')
 
 let app = express();
 app.engine('ejs', require('ejs-locals'));
@@ -14,10 +16,26 @@ app.set('port', config.get('port'));
 app.set('views', path.join(__dirname, 'template'));
 app.set('view engine', 'ejs');
 
+//app.use();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+let MongoStore = require('connect-mongo')(session); // Operations with session + MongoDB
+
+app.use(session({
+    secret: config.get('session:secret'),
+    key: config.get('session:key'),
+    cookie: config.get('session:cookie'),
+    store: new MongoStore({mongooseConnection: mongoose.connection}) // Operations with session + MongoDB
+}));
+
+app.use(function (req, res, next) {
+    req.session.numberOfInputs = req.session.numberOfInputs + 1 || 1;
+    res.send("Visits: " + req.session.numberOfInputs);
+});
+
 
 app.use(require('middleware/sendHttpError'));
 

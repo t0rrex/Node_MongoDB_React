@@ -1,8 +1,40 @@
 <nav class="navbar navbar-default" role="navigation">
     <ul class="nav navbar-nav">
         <li><a href="/">Главная</a></li>
+        <% if (user) { %>
+            <li><a href="/chat">Чат</a></li>
+        <% } %>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="/login">Войти</a></li>
+        <% if (user) { %>
+            <li>
+                <a href="" class="logout">Выйти</a>
+            </li>
+        <% } else { %>
+            <li><a href="/login">Войти</a></li>
+        <% } %>
     </ul>
 </nav>
+
+<script>
+    $(function () {
+        $('.logout').on("click", function () {
+            let  body = $(document.body);
+            $.ajax({
+                url: "/logout",
+                method: "POST",
+                statusCode: {
+                    200: function () {
+                        body.html("Вы вышли с сайта").addClass('alert-success');
+                        window.location.href = "/";
+                    },
+                    403: function (jqXHR) {
+                        let error = JSON.parse(jqXHR.responseText);
+                        $('.error', body).html(error.message);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>

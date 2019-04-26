@@ -13,6 +13,8 @@
   "session": {
     "secret": "KillerIsJim",
     "key": "sid",
+    "resave": true,
+    "saveUninitialized": false,
     "cookie": {
       "path": "/",
       "httpOnly": "true",

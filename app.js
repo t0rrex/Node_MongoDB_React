@@ -57,17 +57,9 @@ app.use(function(err, req, res, next) {
 });
 
 let server = http.createServer(app);
-let io = require('socket.io')(server);
 
-io.sockets.on('connection', function (socket) {
-    socket.on('message', function (text, cb) {
-        socket.broadcast.emit('message', text);
-        cb("123");
-    });
-    socket.on('disconnect', function () {
-        console.log('user disconnected');
-    });
-});
+require('./socket')(server);
+
 
 server.listen(config.get('port'), function() {
     log.info('Express server listening on port ' + app.get('port'));

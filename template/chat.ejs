@@ -4,26 +4,56 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 
 <div id="room">
-    <ul></ul>
+    <ul class="list-unstyled"></ul>
     <form>
-        <input class="form-control" autocomplete="off" autofocus placeholder="Сообщение...">
+        <input disabled class="form-control" autocomplete="off" autofocus placeholder="Сообщение...">
     </form>
 </div>
 
 <script>
-    let socket = io.connect();
+
+    let socket = io.connect('', {
+        reconnect: false
+    });
+
     let form = $('#room form');
     let ul = $('#room ul');
-    form.submit(function() {
-        let input = $(this).find('input');
-        let text = input.val();
-        input.val('');
-        socket.emit('message', text, function(data) {
-            $('<li>', {text: text}).appendTo(ul);
+    let input = $('#room input');
+
+    socket
+        .on('message', function(message) {
+            printMessage(message);
+        })
+        .on('connect', function() {
+            printStatus("соединение установлено");
+            form.on('submit', sendMessage);
+            input.prop('disabled', false);
+        })
+        .on('disconnect', function() {
+            printStatus("соединение потеряно");
+            form.off('submit', sendMessage);
+            input.prop('disabled', true);
+            setTimeout(reconnect, 500);
         });
+    function sendMessage() {
+        let text = input.val();
+        socket.emit('message', text, function() {
+            printMessage(text);
+        });
+        input.val('');
         return false;
-    });
-    socket.on('message', function(text) {
-        $('<li>', {text: text}).appendTo(ul);
-    });
+    }
+    function reconnect() {
+        socket.once('error', function() {
+            setTimeout(reconnect, 500);
+        });
+        socket.socket.connect();
+    }
+    function printStatus(status) {
+        $('<li>').append($('<i>').text(status)).appendTo(ul);
+    }
+    function printMessage(text) {
+        $('<li>').text(text).appendTo(ul);
+    }
+
 </script>

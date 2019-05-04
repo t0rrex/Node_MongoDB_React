@@ -5,7 +5,7 @@ let config = require('config');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 //let log = require('libs/log')(module);
-let HttpError = require('error').HttpError;
+let HttpError = require('./error').HttpError;
 let session = require('express-session');
 let mongoose = require('libs/mongoose');
 

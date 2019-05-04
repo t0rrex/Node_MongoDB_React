@@ -1,7 +1,6 @@
 let User = require('models/user').User;
 let HttpError = require('error').HttpError;
 let AuthError = require('models/user').AuthError;
-let async = require('async');
 
 exports.get = function(req, res) {
     res.render('login');

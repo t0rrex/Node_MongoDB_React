@@ -4,11 +4,10 @@ let http = require('http');
 let config = require('config');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
-let log = require('./libs/log')(module);
+//let log = require('libs/log')(module);
 let HttpError = require('error').HttpError;
 let session = require('express-session');
-let mongoose = require('./libs/mongoose');
-
+let mongoose = require('libs/mongoose');
 
 let app = express();
 app.engine('ejs', require('ejs-locals'));
@@ -31,14 +30,12 @@ app.use(session({
     saveUninitialized: config.get('session:saveUninitialized'),
     store: new MongoStore({mongooseConnection: mongoose.connection}) // Operations with session + MongoDB
 }));
-
 app.use(require('middleware/sendHttpError'));
 app.use(require('middleware/loadUser'));
 
 require('routes')(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 // error handler
 app.use(function(err, req, res, next) {
     if (typeof err == 'number') {
@@ -58,10 +55,9 @@ app.use(function(err, req, res, next) {
 
 let server = http.createServer(app);
 
-require('./socket')(server);
-
+require('socket')(server);
 
 server.listen(config.get('port'), function() {
-    log.info('Express server listening on port ' + app.get('port'));
+    console.log('Express server listening on port ' + app.get('port'));
 });
 

@@ -1,41 +1,39 @@
-@import url('https://fonts.googleapis.com/css?family=PT+Sans+Caption');
-.navbar {
-    list-style: none;
-    padding: 0 30px;
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 0;
     margin: 0;
-    font-size: 18px;
+}
+
+h1, h2 {
     text-align: center;
-    position: relative;
-    background: white;
+    padding-top: 30px;
 }
-.navbar:after {
-    content: "";
-    position: absolute;
+
+nav {
+    display: flex;
     width: 100%;
-    height: 20px;
-    left: 0;
-    bottom: -20px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 10px 0;
+    box-shadow: 0px 3px 0px #dedede;
 }
-.navbar li {display: inline-block;}
-.navbar a {
-    text-decoration: none;
+
+nav ul {
+    list-style: none;
+    text-align: center;
+}
+nav ul li {
     display: inline-block;
-    margin: 0 15px;
-    padding: 10px 30px;
-    font-family: 'PT Sans Caption', sans-serif;
-    color: #777777;
-    transition: .3s linear;
-    position: relative;
 }
-.navbar a:before,
-.navbar a:before {left: 5px;}
-.navbar a:after {right: 5px;}
-.navbar a.current:before,
-.navbar a.current:after,
-.navbar a:hover:before,
-.navbar a:hover:after {opacity: 1;}
-.navbar a.current,
-.navbar a:hover {color: #F58262;}
-@media(max-width:680px) {
-    .navbar li {display: block;}
+nav ul li a {
+    padding: 5px;
+    text-decoration: none;
+    color: #aaa;
+    font-weight: 600;
+    margin: 0 10px;
 }
+nav ul li a:hover {
+    color: #555;
+}
+
+

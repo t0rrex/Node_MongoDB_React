@@ -6,7 +6,7 @@
 <div id="room">
     <ul class="list-unstyled"></ul>
     <form>
-        <input disabled class="form-control" autocomplete="off" autofocus placeholder="Сообщение...">
+        <input disabled class="form-control" autocomplete="off" autofocus placeholder="Message...">
     </form>
 </div>
 
@@ -25,16 +25,17 @@
             printMessage(message);
         })
         .on('connect', function() {
-            printStatus("соединение установлено");
+            printStatus("connection successful :)");
             form.on('submit', sendMessage);
             input.prop('disabled', false);
         })
         .on('disconnect', function() {
-            printStatus("соединение потеряно");
+            printStatus("connection lost (:");
             form.off('submit', sendMessage);
             input.prop('disabled', true);
             setTimeout(reconnect, 500);
         });
+
     function sendMessage() {
         let text = input.val();
         socket.emit('message', text, function() {
@@ -43,15 +44,18 @@
         input.val('');
         return false;
     }
+
     function reconnect() {
         socket.once('error', function() {
             setTimeout(reconnect, 500);
         });
         socket.socket.connect();
     }
+
     function printStatus(status) {
         $('<li>').append($('<i>').text(status)).appendTo(ul);
     }
+
     function printMessage(text) {
         $('<li>').text(text).appendTo(ul);
     }

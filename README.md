@@ -1,6 +1,13 @@
 # Node_MongoDB_SocketIO
 Проект на Node.js: "Чат с авторизацией пользователей"
 
+Установка:
+1) Клонировать репозиторий: git clone https://github.com/t0rrex/Node_MongoDB_SocketIO.git
+2) Зайти в папку с проектом: cd Node_MongoDB_SocketIO
+3) Установить зависимости: npm install или yarn install
+4) Запустить скрипт npm start или yarn start. Приложение будет доступно на http://localhost:3000
+
+________________________________________________________
 Хранение сессий пользователей и самих пользователей 
 реализовано в базе данных MongoDB Atlas(облачная)
 

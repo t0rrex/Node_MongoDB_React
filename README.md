@@ -5,7 +5,7 @@
 1) Клонировать репозиторий: git clone https://github.com/t0rrex/Node_MongoDB_SocketIO.git
 2) Зайти в папку с проектом: cd Node_MongoDB_SocketIO
 3) Установить зависимости: npm install или yarn install
-4) Перейти в "Add Configuration/ Edit Configurations", далее в "Environment variables"
+4) Создать конфигурацию для app.js, далее в "Environment variables"
  установить "NODE_PATH=.". Запустить app.js. Приложение будет доступно на http://localhost:3000
 
 ________________________________________________________
